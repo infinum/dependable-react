@@ -57,6 +57,12 @@ The lib makes use of the following features that are not yet available everywher
   * [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
   * [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)
 
+[![Build Status](https://travis-ci.org/infinum/dependable-react.svg?branch=master)](https://travis-ci.org/infinum/dependable-react)
+[![Greenkeeper badge](https://badges.greenkeeper.io/infinum/dependable-react.svg)](https://greenkeeper.io/)
+[![npm version](https://badge.fury.io/js/dependable-react.svg)](https://badge.fury.io/js/dependable-react)
+[![Dependency Status](https://david-dm.org/infinum/dependable-react.svg)](https://david-dm.org/infinum/dependable-react)
+[![DevDependency Status](https://david-dm.org/infinum/dependable-react/dev-status.svg)](https://david-dm.org/infinum/dependable-react#info=devDependencies)
+
 ## License
 
 The [MIT License](LICENSE)
