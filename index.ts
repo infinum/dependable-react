@@ -1,7 +1,3 @@
-// tslint:disable: export-name
-// tslint:disable: ban-types
-// tslint:disable: no-construct
-
 import React from 'react';
 
 const mappings = new WeakMap();
