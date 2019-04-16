@@ -21,7 +21,7 @@ type TComplexProvider<T = any> =
     };
 type TProvider<T = any> = IConstructor<T> | TComplexProvider<T>;
 
-export function useInject<T>(cls: IConstructor<T>) {
+export function useInject<T>(cls: IConstructor<T> | InjectionToken<T>) {
   return React.useMemo<T>(() => inject(cls), [cls]);
 }
 
@@ -38,7 +38,7 @@ export function inject<T>(cls: IConstructor<T> | InjectionToken<T>): T {
 export class InjectionToken<T> {
   private key: String;
 
-  constructor(key: string) {
+  constructor(key: string = '') {
     this.key = new String(key);
   }
 }
@@ -57,18 +57,16 @@ export function GenerateRootModule(providers: Array<TProvider>) {
   for (const provider of providers) {
     if (isSingleProvider(provider as IConstructor)) {
       mappings.set(provider, new (provider as IConstructor)());
-
-      return null;
-    }
-
-    const prov = provider as TComplexProvider;
-    const providerToken = prov.provider;
-    if ('initClass' in prov) {
-      mappings.set(providerToken, new prov.initClass());
-    } else if ('initValue' in prov) {
-      mappings.set(providerToken, prov.initValue);
-    } else if ('initFactory' in prov) {
-      mappings.set(providerToken, prov.initFactory());
+    } else {
+      const prov = provider as TComplexProvider;
+      const providerToken = prov.provider;
+      if ('initClass' in prov) {
+        mappings.set(providerToken, new prov.initClass());
+      } else if ('initValue' in prov) {
+        mappings.set(providerToken, prov.initValue);
+      } else if ('initFactory' in prov) {
+        mappings.set(providerToken, prov.initFactory());
+      }
     }
   }
 
