@@ -4,4 +4,8 @@ export class InjectionToken<T> {
   constructor(key: string = '') {
     this.key = new String(key);
   }
+
+  public toString() {
+    return `InjectionToken(${this.key})`;
+  }
 }

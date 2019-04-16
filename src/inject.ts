@@ -1,19 +1,18 @@
-import * as React from 'react';
+import { useMemo } from 'react';
 
-import { InjectionToken } from './InjectionToken';
 import { mappings } from './mappings';
-import { IConstructor } from './types';
+import { TKey } from './types';
 
-export function useInject<T>(cls: IConstructor<T> | InjectionToken<T>) {
-  return React.useMemo<T>(() => inject(cls), [cls]);
+export function useInject<T>(cls: TKey<T>): T {
+  return useMemo<T>(() => inject(cls), [cls]);
 }
 
-export function inject<T>(cls: IConstructor<T> | InjectionToken<T>): T {
+export function inject<T>(cls: TKey<T>): T {
   const isInitialized = mappings.has(cls);
 
   if (!isInitialized) {
     throw new Error('Injectables have to be provided in a module.');
   }
 
-  return mappings.get(cls);
+  return mappings.get(cls) as T;
 }
