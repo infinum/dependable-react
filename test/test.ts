@@ -1,4 +1,4 @@
-import { DefineModule, inject, InjectionToken } from '../src/index';
+import { DefineModule, inject, InjectionToken, GenerateTestBed } from '../src/index';
 
 it('should be able to define and inject a class module', () => {
   class FakeClass {}
@@ -47,4 +47,27 @@ it('should be able to define and inject a factory module', () => {
 
   const value = inject(TOKEN);
   expect(value).toBe(tokenValue);
+});
+
+it('should throw if nothing was provided', () => {
+  class FakeClass {}
+  GenerateTestBed([]);
+
+  expect(() => inject(FakeClass)).toThrowError(
+    'Injectables have to be provided in a module.',
+  );
+});
+
+it('should clear the mappings with TestBed', () => {
+  class FakeClass {}
+  DefineModule([FakeClass]);
+
+  const fc = inject(FakeClass);
+  expect(fc).toBeInstanceOf(FakeClass);
+
+  GenerateTestBed([]);
+
+  expect(() => inject(FakeClass)).toThrowError(
+    'Injectables have to be provided in a module.',
+  );
 });
