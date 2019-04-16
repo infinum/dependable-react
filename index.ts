@@ -53,7 +53,7 @@ function isSingleProvider(provider: IConstructor | TComplexProvider) {
   );
 }
 
-export function GenerateRootModule(providers: Array<TProvider>) {
+export function DefineModule(providers: Array<TProvider>) {
   for (const provider of providers) {
     if (isSingleProvider(provider as IConstructor)) {
       mappings.set(provider, new (provider as IConstructor)());
@@ -71,10 +71,6 @@ export function GenerateRootModule(providers: Array<TProvider>) {
   }
 
   return null;
-}
-
-export function GenerateScopedModule(providers: Array<TProvider>) {
-  throw new Error('Not implemented yet :)');
 }
 
 export function GenerateTestBed(providers: Array<TProvider>) {
