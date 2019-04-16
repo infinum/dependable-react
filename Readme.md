@@ -8,6 +8,48 @@ Note: `dependable-react` has a peer dependency to `react@^16.8.0`, so don't forg
 npm install --save dependable-react react react-dom
 ```
 
+## Usage
+
+### DefineModule
+
+```typescript
+function DefineModule(providers: Array<TProvider>): void;
+```
+
+TODO
+
+### GenerateTestBed
+
+```typescript
+function GenerateTestBed(providers: Array<TProvider>): void;
+```
+
+TODO
+
+### InjectionToken
+
+```typescript
+new InjectionToken<T>(key: string);
+```
+
+TODO
+
+### inject
+
+```typescript
+function inject<T>(cls: IConstructor<T> | InjectionToken<T>): T;
+```
+
+TODO
+
+### useInject
+
+```typescript
+function useInject<T>(cls: IConstructor<T> | InjectionToken<T>): T;
+```
+
+TODO
+
 ### Polyfilling
 
 The lib makes use of the following features that are not yet available everywhere. Based on your browser support, you might want to polyfill them:
@@ -21,7 +63,7 @@ The [MIT License](LICENSE)
 
 ## Credits
 
-datx is maintained and sponsored by
+dependable-react is maintained and sponsored by
 [Infinum](https://www.infinum.co).
 
 <img src="https://infinum.co/infinum.png" width="264">
