@@ -6,8 +6,7 @@ import React from 'react';
 
 const mappings = new WeakMap();
 type IConstructor<T = any> = new () => T;
-type TProvider<T = any> =
-  | IConstructor<T>
+type TComplexProvider<T = any> =
   | {
       provider: IConstructor<T> | InjectionToken<T>;
       initValue: T;
@@ -20,6 +19,7 @@ type TProvider<T = any> =
       provider: IConstructor<T> | InjectionToken<T>;
       initClass: T;
     };
+type TProvider<T = any> = IConstructor<T> | TComplexProvider<T>;
 
 export function useInject<T>(cls: IConstructor<T>) {
   return React.useMemo<T>(() => inject(cls), [cls]);
@@ -43,14 +43,42 @@ export class InjectionToken<T> {
   }
 }
 
+function isSingleProvider(provider: IConstructor): true;
+function isSingleProvider(provider: TComplexProvider): false;
+function isSingleProvider(provider: IConstructor | TComplexProvider) {
+  return (
+    !('initValue' in provider) &&
+    !('initFactory' in provider) &&
+    !('initClass' in provider)
+  );
+}
+
 export function GenerateRootModule(providers: Array<TProvider>) {
+  for (const provider of providers) {
+    if (isSingleProvider(provider as IConstructor)) {
+      mappings.set(provider, new (provider as IConstructor)());
+
+      return null;
+    }
+
+    const prov = provider as TComplexProvider;
+    const providerToken = prov.provider;
+    if ('initClass' in prov) {
+      mappings.set(providerToken, new prov.initClass());
+    } else if ('initValue' in prov) {
+      mappings.set(providerToken, prov.initValue);
+    } else if ('initFactory' in prov) {
+      mappings.set(providerToken, prov.initFactory());
+    }
+  }
+
   return null;
 }
 
 export function GenerateScopedModule(providers: Array<TProvider>) {
-  return null;
+  throw new Error('Not implemented yet :)');
 }
 
 export function GenerateTestBed(providers: Array<TProvider>) {
-  return null;
+  throw new Error('Not implemented yet :)');
 }
