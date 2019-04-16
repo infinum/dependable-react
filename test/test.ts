@@ -1,4 +1,4 @@
-import { DefineModule, inject, InjectionToken } from '../index';
+import { DefineModule, inject, InjectionToken } from '../src/index';
 
 it('should be able to define and inject a class module', () => {
   class FakeClass {}
