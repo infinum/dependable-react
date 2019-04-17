@@ -1,4 +1,9 @@
-import { DefineModule, inject, InjectionToken, GenerateTestBed } from '../src/index';
+import {
+  DefineModule,
+  inject,
+  InjectionToken,
+  GenerateTestBed,
+} from '../src/index';
 
 it('should be able to define and inject a class module', () => {
   class FakeClass {}
@@ -70,4 +75,24 @@ it('should clear the mappings with TestBed', () => {
   expect(() => inject(FakeClass)).toThrowError(
     'Injectables have to be provided in a module.',
   );
+});
+
+it('should be able to name InjectionToken', () => {
+  const tokenValue = '123';
+  const TOKEN = new InjectionToken<string>(tokenValue);
+  const TOKEN_NAMELESS = new InjectionToken<string>();
+  DefineModule([
+    {
+      provider: TOKEN,
+      initValue: tokenValue,
+    },
+    {
+      provider: TOKEN_NAMELESS,
+      initValue: tokenValue,
+    },
+  ]);
+
+  const value = inject(TOKEN);
+  expect(value).toBe(tokenValue);
+  expect(TOKEN.toString()).toBe(`InjectionToken(${tokenValue})`);
 });

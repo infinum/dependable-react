@@ -11,10 +11,6 @@ class ClearableWeakMap<T = any> {
     this._wm = new WeakMap();
   }
 
-  public delete<U extends T>(k: TKey<U>) {
-    return this._wm.delete(k);
-  }
-
   public get<U extends T>(k: TKey<U>) {
     return this._wm.get(k) as U | undefined;
   }

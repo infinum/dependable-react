@@ -4,6 +4,7 @@ import { mappings } from './mappings';
 import { TKey } from './types';
 
 export function useInject<T>(cls: TKey<T>): T {
+  /* istanbul ignore next */
   return useMemo<T>(() => inject(cls), [cls]);
 }
 
