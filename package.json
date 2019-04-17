@@ -1,6 +1,6 @@
 {
   "name": "dependable-react",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "dependencies": {},
@@ -23,7 +23,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc --project tsconfig.build.json --outDir dist"
+    "build": "tsc --project tsconfig.build.json --outDir dist",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
