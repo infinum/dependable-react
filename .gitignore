@@ -3,3 +3,4 @@ node_modules
 
 yarn.error
 .DS_Store
+.rpt2_cache
