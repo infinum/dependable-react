@@ -1,3 +1,4 @@
+import { ScopeToken } from './ScopeToken';
 import { TKey } from './types';
 
 export class DependencyMap<T = any> {
@@ -25,4 +26,4 @@ export class DependencyMap<T = any> {
   }
 }
 
-export const mappings = new WeakMap<any, DependencyMap>();
+export const mappings = new WeakMap<ScopeToken, DependencyMap>();

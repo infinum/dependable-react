@@ -4,6 +4,7 @@ import {
   InjectionToken,
   GenerateTestBed,
 } from '../src/index';
+import { ScopeToken } from '../src/ScopeToken';
 
 it('should be able to define and inject a class module', () => {
   class FakeClass {}
@@ -98,14 +99,13 @@ it('should be able to name InjectionToken', () => {
 });
 
 it('Should work with multiple scopes', () => {
-  const SCOPE_A = {};
-  const SCOPE_B = {};
+  const SCOPE_A = new ScopeToken('A');
   const TOKEN = new InjectionToken<string>();
 
   class ProxyClass {
     public service = inject(TOKEN, this.scope);
 
-    constructor(private scope?: object) { }
+    constructor(private scope?: ScopeToken) { }
   }
 
   DefineModule([
@@ -116,13 +116,13 @@ it('Should work with multiple scopes', () => {
     ProxyClass,
   ], SCOPE_A);
 
-  DefineModule([
+  const SCOPE_B = DefineModule([
     {
       initValue: 'B',
       provider: TOKEN,
     },
     ProxyClass,
-  ], SCOPE_B);
+  ], 'B');
 
   DefineModule([
     {

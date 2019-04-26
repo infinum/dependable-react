@@ -1,13 +1,15 @@
 import { DEFAULT_SCOPE } from './consts';
 import { mappings, DependencyMap } from './mappings';
+import { ScopeToken } from './ScopeToken';
 import { TProvider } from './types';
 import { preprocessProvider } from './utils';
 
-export function DefineModule(providers: Array<TProvider>, scope: object = DEFAULT_SCOPE): void {
-  if (!mappings.has(scope)) {
-    mappings.set(scope, new DependencyMap());
+export function DefineModule(providers: Array<TProvider>, scope: ScopeToken | string = DEFAULT_SCOPE): ScopeToken {
+  const scopeToken = scope instanceof ScopeToken ? scope : new ScopeToken(scope);
+  if (!mappings.has(scopeToken)) {
+    mappings.set(scopeToken, new DependencyMap());
   }
-  const map = mappings.get(scope);
+  const map = mappings.get(scopeToken);
   if (!map) {
     throw new Error('Something went wrong - Dependency map couldn\'t be generated');
   }
@@ -16,16 +18,19 @@ export function DefineModule(providers: Array<TProvider>, scope: object = DEFAUL
     const prov = preprocessProvider(provider);
     const providerToken = prov.provider;
     if ('initClass' in prov) {
-      map.set(providerToken, new prov.initClass(scope));
+      map.set(providerToken, new prov.initClass(scopeToken));
     } else if ('initValue' in prov) {
       map.set(providerToken, prov.initValue);
     } else if ('initFactory' in prov) {
-      map.set(providerToken, prov.initFactory(scope));
+      map.set(providerToken, prov.initFactory(scopeToken));
     }
   }
+
+  return scopeToken;
 }
 
-export function GenerateTestBed(providers: Array<TProvider>, scope: object = DEFAULT_SCOPE): void {
-  mappings.set(scope, new DependencyMap());
-  return DefineModule(providers, scope);
+export function GenerateTestBed(providers: Array<TProvider>, scope: ScopeToken | string = DEFAULT_SCOPE): ScopeToken {
+  const scopeToken = scope instanceof ScopeToken ? scope : new ScopeToken(scope);
+  mappings.set(scopeToken, new DependencyMap());
+  return DefineModule(providers, scopeToken);
 }

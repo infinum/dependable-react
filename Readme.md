@@ -19,7 +19,7 @@ Use this to setup your services/tokens/factories/... that will later be injected
 - A factory (method that will be called)
 
 ```typescript
-function DefineModule(providers: Array<TProvider>): void;
+function DefineModule(providers: Array<TProvider>, scope?: object): void;
 ```
 
 ```typescript
@@ -41,7 +41,7 @@ DefineModule([
 When testing your code that depends on something (e.g. `DataService`) you can't use `DefineModule` since it's a global thing. Use `GenerateTestBead` in a `beforeEach` hook.
 
 ```typescript
-function GenerateTestBed(providers: Array<TProvider>): void;
+function GenerateTestBed(providers: Array<TProvider>, scope?: object): void;
 ```
 
 ```typescript
@@ -95,7 +95,7 @@ DefineModule([
 Use this for injecting stuff in non-react code.
 
 ```typescript
-function inject<T>(cls: IConstructor<T> | InjectionToken<T>): T;
+function inject<T>(cls: IConstructor<T> | InjectionToken<T>, scope?: object): T;
 ```
 
 ```typescript
@@ -115,8 +115,22 @@ DefineModule([SomeService, DataService]);
 ### useInject
 
 ```typescript
-function useInject<T>(cls: IConstructor<T> | InjectionToken<T>): T;
+function useInject<T>(cls: IConstructor<T> | InjectionToken<T>, scope?: object): T;
 ```
+
+## Scope & SSR support
+
+In order to support Server-side rendering and other use cases that require multiple scopes, there is a possibility to define a specific scope.
+
+The scope will be passed to the class as the constructor argument or to a factory as a function argument. That way the class or factory can pass it to inject if they need it.
+
+### useContextInject
+
+```typescript
+function useContextInject<T>(cls: TKey<T>, contextKey: Context<object>): T;
+```
+
+To make things simpler with React, the most likely case is to pass the scope through the React context. To avoid two operations (`useContext` to get the scope, and then `useInject`), there is one more react hook called `useContextInject`.
 
 TODO
 

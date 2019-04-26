@@ -1,15 +1,21 @@
-import { useMemo } from 'react';
+import { Context, useContext, useMemo } from 'react';
 
 import { DEFAULT_SCOPE } from './consts';
 import { mappings } from './mappings';
+import { ScopeToken } from './ScopeToken';
 import { TKey } from './types';
 
-export function useInject<T>(cls: TKey<T>, scope: object = DEFAULT_SCOPE): T {
+export function useInject<T>(cls: TKey<T>, scope: ScopeToken = DEFAULT_SCOPE): T {
   /* istanbul ignore next */
-  return useMemo<T>(() => inject(cls, scope), [cls]);
+  return useMemo<T>(() => inject(cls, scope), [cls, scope]);
 }
 
-export function inject<T>(cls: TKey<T>, scope: object = DEFAULT_SCOPE): T {
+export function useContextInject<T>(cls: TKey<T>, contextKey: Context<ScopeToken>): T {
+  const scope = useContext(contextKey);
+  return useInject(cls, scope);
+}
+
+export function inject<T>(cls: TKey<T>, scope: ScopeToken = DEFAULT_SCOPE): T {
   const map = mappings.get(scope);
   if (!map) {
     throw new Error('The given scope is not defined');
