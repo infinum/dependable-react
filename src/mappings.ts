@@ -4,11 +4,7 @@ import { TKey } from './types';
 export class DependencyMap<T = any> {
   private _wm: WeakMap<TKey<T>, T>;
 
-  constructor(init: Iterable<any> = []) {
-    this._wm = new WeakMap(init);
-  }
-
-  public clear() {
+  constructor() {
     this._wm = new WeakMap();
   }
 

@@ -11,6 +11,7 @@ export function DefineModule(providers: Array<TProvider>, scope: ScopeToken | st
   }
   const map = mappings.get(scopeToken);
   if (!map) {
+    /* istanbul ignore next */
     throw new Error('Something went wrong - Dependency map couldn\'t be generated');
   }
 

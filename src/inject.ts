@@ -11,7 +11,9 @@ export function useInject<T>(cls: TKey<T>, scope: ScopeToken = DEFAULT_SCOPE): T
 }
 
 export function useContextInject<T>(cls: TKey<T>, contextKey: Context<ScopeToken>): T {
+  /* istanbul ignore next */
   const scope = useContext(contextKey);
+  /* istanbul ignore next */
   return useInject(cls, scope);
 }
 

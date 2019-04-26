@@ -98,6 +98,12 @@ it('should be able to name InjectionToken', () => {
   expect(TOKEN.toString()).toBe(`InjectionToken(${tokenValue})`);
 });
 
+it('should be able to name ScopeToken', () => {
+  const tokenValue = '123';
+  const TOKEN = new ScopeToken(tokenValue);
+  expect(TOKEN.toString()).toBe(`ScopeToken(${tokenValue})`);
+});
+
 it('Should work with multiple scopes', () => {
   const SCOPE_A = new ScopeToken('A');
   const TOKEN = new InjectionToken<string>();
@@ -135,6 +141,20 @@ it('Should work with multiple scopes', () => {
   expect(inject(ProxyClass, SCOPE_A).service).toBe('A');
   expect(inject(ProxyClass, SCOPE_B).service).toBe('B');
   expect(inject(ProxyClass).service).toBe('C');
+});
+
+it('Should throw if the scope is not defined', () => {
+  const UNDEFINED_SCOPE = new ScopeToken();
+  const TOKEN = new InjectionToken<string>();
+
+  DefineModule([
+    {
+      initValue: 'C',
+      provider: TOKEN,
+    }
+  ]);
+
+  expect(() => inject(TOKEN, UNDEFINED_SCOPE)).toThrow();
 });
 
 it('Should work with multiple scopes', () => {
