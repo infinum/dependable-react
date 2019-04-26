@@ -18,8 +18,10 @@ Use this to setup your services/tokens/factories/... that will later be injected
 - A value (e.g. `window`)
 - A factory (method that will be called)
 
+You can also define a parent scope to enable scope nesting.
+
 ```typescript
-function DefineModule(providers: Array<TProvider>, scope?: ScopeToken | string): void;
+function DefineModule(providers: Array<TProvider>, scope?: ScopeToken | string, parentScope?: ScopeToken): ScopeToken;
 ```
 
 ```typescript
@@ -41,7 +43,7 @@ DefineModule([
 When testing your code that depends on something (e.g. `DataService`) you can't use `DefineModule` since it's a global thing. Use `GenerateTestBead` in a `beforeEach` hook.
 
 ```typescript
-function GenerateTestBed(providers: Array<TProvider>, scope?: ScopeToken | string): void;
+function GenerateTestBed(providers: Array<TProvider>, scope?: ScopeToken | string, parentScope?: ScopeToken): ScopeToken;
 ```
 
 ```typescript

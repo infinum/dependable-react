@@ -136,3 +136,45 @@ it('Should work with multiple scopes', () => {
   expect(inject(ProxyClass, SCOPE_B).service).toBe('B');
   expect(inject(ProxyClass).service).toBe('C');
 });
+
+it('Should work with multiple scopes', () => {
+  const SCOPE_A = new ScopeToken('A');
+  const TOKEN_A = new InjectionToken<string>();
+  const TOKEN_B = new InjectionToken<string>();
+
+  class ProxyClass {
+    public service = inject(TOKEN_A, this.scope);
+
+    constructor(private scope?: ScopeToken) { }
+  }
+
+  const PARENT = DefineModule([
+    {
+      initValue: 'B',
+      provider: TOKEN_A,
+    },
+    {
+      initValue: 'b',
+      provider: TOKEN_B,
+    }
+  ], 'Parent');
+
+  DefineModule([
+    {
+      initValue: 'A',
+      provider: TOKEN_A,
+    },
+    ProxyClass,
+  ], SCOPE_A, PARENT);
+
+  const SCOPE_B = DefineModule([
+    ProxyClass,
+  ], 'B', PARENT);
+
+  const SCOPE_C = DefineModule([], 'C');
+
+  expect(inject(ProxyClass, SCOPE_A).service).toBe('A');
+  expect(inject(ProxyClass, SCOPE_B).service).toBe('B');
+  expect(inject(TOKEN_B, SCOPE_B)).toBe('b');
+  expect(() => inject(TOKEN_B, SCOPE_C)).toThrow();
+});

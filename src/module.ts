@@ -1,10 +1,10 @@
-import { DEFAULT_SCOPE } from './consts';
+import { DEFAULT_SCOPE, PARENT_SCOPE_KEY } from './consts';
 import { mappings, DependencyMap } from './mappings';
 import { ScopeToken } from './ScopeToken';
 import { TProvider } from './types';
 import { preprocessProvider } from './utils';
 
-export function DefineModule(providers: Array<TProvider>, scope: ScopeToken | string = DEFAULT_SCOPE): ScopeToken {
+export function DefineModule(providers: Array<TProvider>, scope: ScopeToken | string = DEFAULT_SCOPE, parentScope?: ScopeToken): ScopeToken {
   const scopeToken = scope instanceof ScopeToken ? scope : new ScopeToken(scope);
   if (!mappings.has(scopeToken)) {
     mappings.set(scopeToken, new DependencyMap());
@@ -12,6 +12,10 @@ export function DefineModule(providers: Array<TProvider>, scope: ScopeToken | st
   const map = mappings.get(scopeToken);
   if (!map) {
     throw new Error('Something went wrong - Dependency map couldn\'t be generated');
+  }
+
+  if (parentScope) {
+    map.set(PARENT_SCOPE_KEY, parentScope);
   }
 
   for (const provider of providers) {
@@ -29,8 +33,8 @@ export function DefineModule(providers: Array<TProvider>, scope: ScopeToken | st
   return scopeToken;
 }
 
-export function GenerateTestBed(providers: Array<TProvider>, scope: ScopeToken | string = DEFAULT_SCOPE): ScopeToken {
+export function GenerateTestBed(providers: Array<TProvider>, scope: ScopeToken | string = DEFAULT_SCOPE, parentScope?: ScopeToken): ScopeToken {
   const scopeToken = scope instanceof ScopeToken ? scope : new ScopeToken(scope);
   mappings.set(scopeToken, new DependencyMap());
-  return DefineModule(providers, scopeToken);
+  return DefineModule(providers, scopeToken, parentScope);
 }
