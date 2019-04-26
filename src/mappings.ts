@@ -1,9 +1,9 @@
 import { TKey } from './types';
 
-class ClearableWeakMap<T = any> {
+export class DependencyMap<T = any> {
   private _wm: WeakMap<TKey<T>, T>;
 
-  constructor(init: Iterable<any>) {
+  constructor(init: Iterable<any> = []) {
     this._wm = new WeakMap(init);
   }
 
@@ -25,4 +25,4 @@ class ClearableWeakMap<T = any> {
   }
 }
 
-export const mappings = new ClearableWeakMap([]);
+export const mappings = new WeakMap<any, DependencyMap>();

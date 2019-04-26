@@ -1,6 +1,6 @@
 import { InjectionToken } from './InjectionToken';
 
-export type IConstructor<T = any> = new () => T;
+export type IConstructor<T = any> = new (scope?: object) => T;
 export type TKey<T = any> = InjectionToken<T> | IConstructor<T>;
 
 export type TComplexProvider<T = any> =
@@ -10,7 +10,7 @@ export type TComplexProvider<T = any> =
   }
   | {
     provider: TKey<T>;
-    initFactory(): T;
+    initFactory(scope?: object): T;
   }
   | {
     provider: TKey<T>;

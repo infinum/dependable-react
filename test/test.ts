@@ -96,3 +96,43 @@ it('should be able to name InjectionToken', () => {
   expect(value).toBe(tokenValue);
   expect(TOKEN.toString()).toBe(`InjectionToken(${tokenValue})`);
 });
+
+it('Should work with multiple scopes', () => {
+  const SCOPE_A = {};
+  const SCOPE_B = {};
+  const TOKEN = new InjectionToken<string>();
+
+  class ProxyClass {
+    public service = inject(TOKEN, this.scope);
+
+    constructor(private scope?: object) { }
+  }
+
+  DefineModule([
+    {
+      initValue: 'A',
+      provider: TOKEN,
+    },
+    ProxyClass,
+  ], SCOPE_A);
+
+  DefineModule([
+    {
+      initValue: 'B',
+      provider: TOKEN,
+    },
+    ProxyClass,
+  ], SCOPE_B);
+
+  DefineModule([
+    {
+      initValue: 'C',
+      provider: TOKEN,
+    },
+    ProxyClass,
+  ]);
+
+  expect(inject(ProxyClass, SCOPE_A).service).toBe('A');
+  expect(inject(ProxyClass, SCOPE_B).service).toBe('B');
+  expect(inject(ProxyClass).service).toBe('C');
+});
