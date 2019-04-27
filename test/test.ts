@@ -1,9 +1,4 @@
-import {
-  DefineModule,
-  inject,
-  InjectionToken,
-  GenerateTestBed,
-} from '../src/index';
+import { DefineModule, inject, InjectionToken, GenerateTestBed } from '../src/index';
 import { ScopeToken } from '../src/ScopeToken';
 
 it('should be able to define and inject a class module', () => {
@@ -59,9 +54,7 @@ it('should throw if nothing was provided', () => {
   class FakeClass {}
   GenerateTestBed([]);
 
-  expect(() => inject(FakeClass)).toThrowError(
-    'Injectables have to be provided in a module.',
-  );
+  expect(() => inject(FakeClass)).toThrowError('Injectables have to be provided in a module.');
 });
 
 it('should clear the mappings with TestBed', () => {
@@ -73,9 +66,7 @@ it('should clear the mappings with TestBed', () => {
 
   GenerateTestBed([]);
 
-  expect(() => inject(FakeClass)).toThrowError(
-    'Injectables have to be provided in a module.',
-  );
+  expect(() => inject(FakeClass)).toThrowError('Injectables have to be provided in a module.');
 });
 
 it('should be able to name InjectionToken', () => {
@@ -111,24 +102,30 @@ it('Should work with multiple scopes', () => {
   class ProxyClass {
     public service = inject(TOKEN, this.scope);
 
-    constructor(private scope?: ScopeToken) { }
+    constructor(private scope?: ScopeToken) {}
   }
 
-  DefineModule([
-    {
-      initValue: 'A',
-      provider: TOKEN,
-    },
-    ProxyClass,
-  ], SCOPE_A);
+  DefineModule(
+    [
+      {
+        initValue: 'A',
+        provider: TOKEN,
+      },
+      ProxyClass,
+    ],
+    SCOPE_A,
+  );
 
-  const SCOPE_B = DefineModule([
-    {
-      initValue: 'B',
-      provider: TOKEN,
-    },
-    ProxyClass,
-  ], 'B');
+  const SCOPE_B = DefineModule(
+    [
+      {
+        initValue: 'B',
+        provider: TOKEN,
+      },
+      ProxyClass,
+    ],
+    'B',
+  );
 
   DefineModule([
     {
@@ -151,7 +148,7 @@ it('Should throw if the scope is not defined', () => {
     {
       initValue: 'C',
       provider: TOKEN,
-    }
+    },
   ]);
 
   expect(() => inject(TOKEN, UNDEFINED_SCOPE)).toThrow();
@@ -165,31 +162,36 @@ it('Should work with multiple scopes', () => {
   class ProxyClass {
     public service = inject(TOKEN_A, this.scope);
 
-    constructor(private scope?: ScopeToken) { }
+    constructor(private scope?: ScopeToken) {}
   }
 
-  const PARENT = DefineModule([
-    {
-      initValue: 'B',
-      provider: TOKEN_A,
-    },
-    {
-      initValue: 'b',
-      provider: TOKEN_B,
-    }
-  ], 'Parent');
+  const PARENT = DefineModule(
+    [
+      {
+        initValue: 'B',
+        provider: TOKEN_A,
+      },
+      {
+        initValue: 'b',
+        provider: TOKEN_B,
+      },
+    ],
+    'Parent',
+  );
 
-  DefineModule([
-    {
-      initValue: 'A',
-      provider: TOKEN_A,
-    },
-    ProxyClass,
-  ], SCOPE_A, PARENT);
+  DefineModule(
+    [
+      {
+        initValue: 'A',
+        provider: TOKEN_A,
+      },
+      ProxyClass,
+    ],
+    SCOPE_A,
+    PARENT,
+  );
 
-  const SCOPE_B = DefineModule([
-    ProxyClass,
-  ], 'B', PARENT);
+  const SCOPE_B = DefineModule([ProxyClass], 'B', PARENT);
 
   const SCOPE_C = DefineModule([], 'C');
 
