@@ -60,6 +60,35 @@ it('should work with the provider', () => {
   expect(renderedResults && renderedResults.children).toEqual(['injection', ' ', 'ScopeToken(CONTEXT_SCOPE)']);
 });
 
+it('should work with the test provider', () => {
+  const TOKEN = new InjectionToken<string>();
+  DefineModule([
+    {
+      provider: TOKEN,
+      initValue: 'default',
+    },
+  ]);
+
+  const TestComponent = () => {
+    const fc = useInject(TOKEN);
+    const scope = React.useContext(InjectionContext);
+
+    return (
+      <div>
+        {fc} {scope.toString()}
+      </div>
+    );
+  };
+
+  expect(() => {
+    TestRenderer.create(
+      <InjectionProvider test providers={[]}>
+        <TestComponent />
+      </InjectionProvider>,
+    );
+  }).toThrowError('Injectables have to be provided in a module.');
+});
+
 it('should work with the provider and default scope', () => {
   const TOKEN = new InjectionToken<string>();
   DefineModule([
