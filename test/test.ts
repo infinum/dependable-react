@@ -90,8 +90,10 @@ it('should be able to name InjectionToken', () => {
 });
 
 it('should be able to name ScopeToken', () => {
+  const FIRST_TOKEN = new ScopeToken('First!');
   const tokenValue = '123';
   const TOKEN = new ScopeToken(tokenValue);
+  expect(FIRST_TOKEN.toString()).toBe(`ScopeToken(First!)`);
   expect(TOKEN.toString()).toBe(`ScopeToken(${tokenValue})`);
 });
 
