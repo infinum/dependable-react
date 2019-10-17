@@ -6,6 +6,7 @@ interface IProviderProps {
     providers: Array<TProvider>;
     scope?: ScopeToken | string;
     parentScope?: ScopeToken;
+    test?: boolean;
 }
 export declare const Provider: React.FC<IProviderProps>;
 export {};

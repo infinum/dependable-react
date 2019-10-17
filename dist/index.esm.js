@@ -47,7 +47,7 @@ var InjectionContext = createContext(DEFAULT_SCOPE);
 
 function useInject(cls, scope) {
     var contextScope = useContext(InjectionContext);
-    var moduleScope = scope || contextScope || DEFAULT_SCOPE;
+    var moduleScope = scope || contextScope;
     /* istanbul ignore next */
     return useMemo(function () { return inject(cls, moduleScope); }, [cls, moduleScope]);
 }
@@ -121,9 +121,13 @@ function GenerateTestBed(providers, scope, parentScope) {
 }
 
 var Provider = function (_a) {
-    var children = _a.children, parentScope = _a.parentScope, providers = _a.providers, scope = _a.scope;
-    var moduleScopeId = scope || new ScopeToken('CONTEXT_SCOPE');
-    var moduleScope = DefineModule(providers, moduleScopeId, parentScope);
+    var children = _a.children, parentScope = _a.parentScope, providers = _a.providers, scope = _a.scope, test = _a.test;
+    var contextScope = useContext(InjectionContext);
+    var parentScopeId = parentScope || (test ? undefined : contextScope);
+    var moduleScopeId = scope || (test ? undefined : new ScopeToken('CONTEXT_SCOPE'));
+    var moduleScope = test
+        ? GenerateTestBed(providers, moduleScopeId, parentScopeId)
+        : DefineModule(providers, moduleScopeId, parentScopeId);
     return createElement(InjectionContext.Provider, { value: moduleScope }, Children.only(children));
 };
 
