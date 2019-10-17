@@ -38,12 +38,36 @@ DefineModule([
 ]);
 ```
 
+### InjectionProvider
+
+A provider that creates a new scope and passes it to the `useInject` automatically. This enables structural scoping without worying about the scope tokens.
+
+```typescript
+function InjectionProvider(options: {
+  providers: Array<TProvider>;
+  scope?: ScopeToken | string;
+  parentScope?: ScopeToken;
+});
+```
+
+```typescript
+const App = () => (
+  <InjectionProvider provider={[DataService]}>
+    <SomeComponent />
+  </InjectionProvider>
+);
+```
+
 ### GenerateTestBed
 
 When testing your code that depends on something (e.g. `DataService`) you can't use `DefineModule` since it's a global thing. Use `GenerateTestBead` in a `beforeEach` hook.
 
 ```typescript
-function GenerateTestBed(providers: Array<TProvider>, scope?: ScopeToken | string, parentScope?: ScopeToken): ScopeToken;
+function GenerateTestBed(
+  providers: Array<TProvider>,
+  scope?: ScopeToken | string,
+  parentScope?: ScopeToken,
+): ScopeToken;
 ```
 
 ```typescript
