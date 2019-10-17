@@ -1,13 +1,10 @@
+import { ScopeToken } from './ScopeToken';
 import { TKey } from './types';
 
-class ClearableWeakMap<T = any> {
+export class DependencyMap<T = any> {
   private _wm: WeakMap<TKey<T>, T>;
 
-  constructor(init: Iterable<any>) {
-    this._wm = new WeakMap(init);
-  }
-
-  public clear() {
+  constructor() {
     this._wm = new WeakMap();
   }
 
@@ -25,4 +22,4 @@ class ClearableWeakMap<T = any> {
   }
 }
 
-export const mappings = new ClearableWeakMap([]);
+export const mappings = new WeakMap<ScopeToken, DependencyMap>();
