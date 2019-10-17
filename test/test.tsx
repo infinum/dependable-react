@@ -196,3 +196,78 @@ it('should work with the provider and a custom parent scope', () => {
   const renderedResults = testRenderer.toJSON();
   expect(renderedResults && renderedResults.children).toEqual(['custom']);
 });
+
+it('should work with nested providers', () => {
+  const TOKEN = new InjectionToken<string>();
+  DefineModule([
+    {
+      provider: TOKEN,
+      initValue: 'default',
+    },
+  ]);
+
+  const TestComponent = () => {
+    const fc = useInject(TOKEN);
+
+    return <div>{fc}</div>;
+  };
+
+  const testRenderer = TestRenderer.create(
+    <InjectionProvider
+      providers={[
+        {
+          provider: TOKEN,
+          initValue: 'level 1',
+        },
+      ]}
+    >
+      <InjectionProvider
+        providers={[
+          {
+            provider: TOKEN,
+            initValue: 'level 2',
+          },
+        ]}
+      >
+        <TestComponent />
+      </InjectionProvider>
+    </InjectionProvider>,
+  );
+
+  const renderedResults = testRenderer.toJSON();
+  expect(renderedResults && renderedResults.children).toEqual(['level 2']);
+});
+
+it('should work with nested providers and fallback', () => {
+  const TOKEN = new InjectionToken<string>();
+  DefineModule([
+    {
+      provider: TOKEN,
+      initValue: 'default',
+    },
+  ]);
+
+  const TestComponent = () => {
+    const fc = useInject(TOKEN);
+
+    return <div>{fc}</div>;
+  };
+
+  const testRenderer = TestRenderer.create(
+    <InjectionProvider
+      providers={[
+        {
+          provider: TOKEN,
+          initValue: 'level 1',
+        },
+      ]}
+    >
+      <InjectionProvider providers={[]}>
+        <TestComponent />
+      </InjectionProvider>
+    </InjectionProvider>,
+  );
+
+  const renderedResults = testRenderer.toJSON();
+  expect(renderedResults && renderedResults.children).toEqual(['level 1']);
+});

@@ -12,9 +12,11 @@ interface IProviderProps {
 }
 
 export const Provider: React.FC<IProviderProps> = ({ children, parentScope, providers, scope }) => {
+  const contextScope = React.useContext(InjectionContext);
+  const parentScopeId = parentScope || contextScope;
   const moduleScopeId = scope || new ScopeToken('CONTEXT_SCOPE');
 
-  const moduleScope = DefineModule(providers, moduleScopeId, parentScope);
+  const moduleScope = DefineModule(providers, moduleScopeId, parentScopeId);
 
   return <InjectionContext.Provider value={moduleScope}>{React.Children.only(children)}</InjectionContext.Provider>;
 };
