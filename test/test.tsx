@@ -300,3 +300,30 @@ it('should work with nested providers and fallback', () => {
   const renderedResults = testRenderer.toJSON();
   expect(renderedResults && renderedResults.children).toEqual(['level 1']);
 });
+
+it('should work with empty nested providers and fallback', () => {
+  const TOKEN = new InjectionToken<string>();
+  DefineModule([
+    {
+      provider: TOKEN,
+      initValue: 'default',
+    },
+  ]);
+
+  const TestComponent = () => {
+    const fc = useInject(TOKEN);
+
+    return <div>{fc}</div>;
+  };
+
+  const testRenderer = TestRenderer.create(
+    <InjectionProvider providers={[]}>
+      <InjectionProvider providers={[]}>
+        <TestComponent />
+      </InjectionProvider>
+    </InjectionProvider>,
+  );
+
+  const renderedResults = testRenderer.toJSON();
+  expect(renderedResults && renderedResults.children).toEqual(['default']);
+});
