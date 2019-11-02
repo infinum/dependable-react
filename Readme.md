@@ -49,6 +49,8 @@ function GenerateTestBed(providers: Array<TProvider>, scope?: ScopeToken | strin
 ```typescript
 import { DataService } from '../';
 
+const STORAGE_TOKEN = new InjectionToken<Storage>();
+
 beforeEach(() => {
   class FakeDataService {
     public load() {}
@@ -60,7 +62,7 @@ beforeEach(() => {
       initClass: FakeDataService,
     },
     {
-      provider: new ,
+      provider: STORAGE_TOKEN,
       initFactory: () => {
         if (window.require && window.require('electron')) {
           return new ElectronStoreService(window);
