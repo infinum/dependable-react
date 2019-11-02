@@ -5,7 +5,7 @@ import { ScopeToken } from './ScopeToken';
 import { TProvider } from './types';
 
 interface IProviderProps {
-  children: any;
+  children: React.ReactNode;
   providers: Array<TProvider>;
   scope?: ScopeToken | string;
   parentScope?: ScopeToken;
@@ -21,5 +21,5 @@ export const Provider: React.FC<IProviderProps> = ({ children, parentScope, prov
     ? GenerateTestBed(providers, moduleScopeId, parentScopeId)
     : DefineModule(providers, moduleScopeId, parentScopeId);
 
-  return <InjectionContext.Provider value={moduleScope}>{React.Children.only(children)}</InjectionContext.Provider>;
+  return <InjectionContext.Provider value={moduleScope}>{children}</InjectionContext.Provider>;
 };
