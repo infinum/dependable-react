@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, createElement, Children } from 'react';
+import { createContext, useContext, useMemo, createElement } from 'react';
 
 var InjectionToken = /** @class */ (function () {
     function InjectionToken(key) {
@@ -128,7 +128,7 @@ var Provider = function (_a) {
     var moduleScope = test
         ? GenerateTestBed(providers, moduleScopeId, parentScopeId)
         : DefineModule(providers, moduleScopeId, parentScopeId);
-    return createElement(InjectionContext.Provider, { value: moduleScope }, Children.only(children));
+    return createElement(InjectionContext.Provider, { value: moduleScope }, children);
 };
 
 export { DefineModule, GenerateTestBed, Provider as InjectionProvider, InjectionToken, inject, useInject };

@@ -16,6 +16,7 @@
     "react": "^16.11.0",
     "react-test-renderer": "^16.11.0",
     "rollup": "^1.26.2",
+    "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-typescript2": "^0.24.3",
     "rollup-plugin-uglify": "^6.0.3",
     "ts-jest": "^24.1.0",
