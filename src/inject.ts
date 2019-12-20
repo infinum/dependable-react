@@ -1,20 +1,16 @@
-import { Context, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { DEFAULT_SCOPE, PARENT_SCOPE_KEY } from './consts';
 import { mappings } from './mappings';
 import { ScopeToken } from './ScopeToken';
 import { TKey } from './types';
+import { InjectionContext } from './InjectionContext';
 
-export function useInject<T>(cls: TKey<T>, scope: ScopeToken = DEFAULT_SCOPE): T {
+export function useInject<T>(cls: TKey<T>, scope?: ScopeToken): T {
+  const contextScope = useContext(InjectionContext);
+  const moduleScope = scope || contextScope;
   /* istanbul ignore next */
-  return useMemo<T>(() => inject(cls, scope), [cls, scope]);
-}
-
-export function useContextInject<T>(cls: TKey<T>, contextKey: Context<ScopeToken>): T {
-  /* istanbul ignore next */
-  const scope = useContext(contextKey);
-  /* istanbul ignore next */
-  return useInject(cls, scope);
+  return useMemo<T>(() => inject(cls, moduleScope), [cls, moduleScope]);
 }
 
 export function inject<T>(cls: TKey<T>, scope: ScopeToken = DEFAULT_SCOPE): T {

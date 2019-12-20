@@ -36,6 +36,14 @@ it('should be able to define and inject a value module', () => {
   expect(value).toBe(tokenValue);
 });
 
+it("shouldn't be able to redefine the parent scope", () => {
+  const parent = new ScopeToken('parent');
+
+  const scope = DefineModule([], 'test', parent);
+
+  expect(() => DefineModule([], scope, new ScopeToken('parent2'))).toThrowError("Parent scope can't be redefined");
+});
+
 it('should be able to define and inject a factory module', () => {
   const tokenValue = '123';
   const TOKEN = new InjectionToken<string>();
@@ -90,8 +98,10 @@ it('should be able to name InjectionToken', () => {
 });
 
 it('should be able to name ScopeToken', () => {
+  const FIRST_TOKEN = new ScopeToken('First!');
   const tokenValue = '123';
   const TOKEN = new ScopeToken(tokenValue);
+  expect(FIRST_TOKEN.toString()).toBe(`ScopeToken(First!)`);
   expect(TOKEN.toString()).toBe(`ScopeToken(${tokenValue})`);
 });
 

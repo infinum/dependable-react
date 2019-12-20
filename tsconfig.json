@@ -3,6 +3,7 @@
     "target": "es5",
     "lib": ["es2015", "dom", "esnext"],
     "allowJs": false,
+    "checkJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -11,11 +12,9 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "jsx": "react"
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "exclude": ["node_modules", "dist", "coverage", ".rpt2_cache", ".vscode"]
 }
